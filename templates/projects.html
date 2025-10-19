@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Artem's Projects{% endblock %}
+
+{% block content %}
+    <h1>My Cloud Projects</h1>
+    <p>Below are some of my projects, including live demos and links to the source code.</p>
+
+    <a href="https://ai-travel-buddy-430426721411.us-west1.run.app" target="_blank" class="project-tile-link">
+        <div class="project-card">
+            <h3>AI Travel Buddy</h3>
+            <p>A conversational AI application to help users plan trips.</p>
+            <p class="technologies">
+                **Technologies:** Python, Gemini API, Docker, GCP, Streamlit
+            </p>
+        </div>
+    </a>
+
+    <a href="https://github.com/ArtKomarov/AITravelBuddy" target="_blank" class="github-link">
+        View Code on GitHub
+    </a>
+    
+{% endblock %}

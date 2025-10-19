@@ -1,0 +1,23 @@
+{
+  "particles": {
+    "number": { "value": 40 },
+    "color": { "value": "#42b983" },
+    "shape": { "type": "polygon", "polygon": { "sides": 5 } },
+    "opacity": { "value": 0.9 },
+    "size": { "value": 4 },
+    "links": {
+      "enable": true,
+      "distance": 150,
+      "color": "#42b983",
+      "opacity": 0.8
+    },
+    "move": {
+      "enable": true,
+      "speed": 3,
+      "direction": "none",
+      "random": false,
+      "straight": false,
+      "out_mode": "out"
+    }
+  }
+}

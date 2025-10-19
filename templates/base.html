@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Artem's Hub{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/A_logo.ico">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/cv">CV / Resume</a>
+            <a href="/projects">Projects</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; {{ 2025 }} Artem's Hub</p>
+    </footer>
+{% if request.url.path == "/" %}
+    <div id="tsparticles"></div>
+    <script src="/static/css/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/updater-color@2.12.0/tsparticles.updater.color.min.js"></script>
+{% endif %}
+</body>
+</html>

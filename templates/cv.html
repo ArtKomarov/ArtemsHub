@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Artem's CV{% endblock %}
+
+{% block content %}
+    <h1>CV / Resume</h1>
+
+    <div class="cv-section">
+        <p>A web-friendly version of my CV is below. You can also download the full PDF document.</p>
+        <a href="/static/cv.pdf" download="Artem_Komarov_CV.pdf" class="download-button">Download CV (PDF)</a>
+    </div>
+
+    <div class="cv-embed">
+        <object data="/static/cv.pdf" type="application/pdf" width="100%" height="800px">
+            <p>Your browser does not support PDFs. <a href="/static/cv.pdf" download>Download the CV here.</a></p>
+        </object>
+    </div>
+{% endblock %}

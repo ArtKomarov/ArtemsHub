@@ -1,0 +1,268 @@
+/* --- Global Styles --- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* --- Layout --- */
+main {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* --- Header & Navigation --- */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em 0;
+    text-align: center;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 1em 0;
+    margin-top: 20px;
+    color: #777;
+}
+
+/* --- Typography --- */
+h1, h2, h3 {
+    color: #2c3e50;
+}
+
+/* --- Links --- */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* --- Component-Specific Styles --- */
+
+/* Project Card */
+.project-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.project-card h3 {
+    margin-top: 0;
+    color: #34495e;
+}
+
+.project-card ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.project-card li {
+    margin-bottom: 8px;
+}
+
+.project-card .technologies {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* CV Section and Embed */
+.cv-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cv-embed {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+/* Download Button */
+.download-button {
+    display: inline-block;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.download-button:hover {
+    background-color: #2980b9;
+    text-decoration: none;
+}
+
+/* --- Responsive Design --- */
+
+/* Adjust main content area for smaller screens */
+@media (max-width: 1040px) {
+    main {
+        max-width: 100%;
+        margin: 10px;
+        padding: 10px;
+    }
+}
+
+/* Adjust navigation for mobile devices */
+@media (max-width: 600px) {
+    header nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header nav a {
+        margin: 10px 0;
+    }
+
+    /* Hide the embedded CV on very small screens to avoid overflow issues */
+    .cv-embed {
+        display: none;
+    }
+}
+
+/* --- Interactive Homepage --- */
+#tsparticles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#homepage-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Hero Section Styling --- */
+#homepage-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15vh 0;
+}
+
+.welcome-message {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.intro-message {
+    font-size: 1.5em;
+    color: #555;
+}
+
+#typewriter-text {
+    font-weight: normal;
+    color: #3498db;
+}
+
+/* --- Project Card Styles --- */
+
+.project-tile-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 1em;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.project-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    
+    /* The 3D effect shadows */
+    box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+
+    /* Left border for a subtle splash of color */
+    border-left: 5px solid #3498db; 
+    
+    /* Use flexbox to align content and icon */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hover and Active effects */
+.project-tile-link:hover .project-card {
+    transform: translateY(-1px); 
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.15),
+        0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.project-tile-link:active .project-card {
+    transform: translateY(1px);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Project Card Typography */
+.project-card h3 {
+    margin-top: 0;
+    color: #34495e;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+    position: relative;
+    padding-left: 30px; /* Make space for the icon */
+}
+
+/* Icon for the project title */
+.project-card h3::before {
+    content: "🌍"; /* Globe emoji for "travel buddy" */
+    position: absolute;
+    left: 0;
+    font-size: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.project-card p {
+    margin: 0.5em 0;
+    color: #555;
+}
+
+.project-card .technologies {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 1em;
+}

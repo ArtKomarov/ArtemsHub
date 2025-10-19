@@ -1,0 +1,83 @@
+name: CI/CD Deployment to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+env:
+  PROJECT_ID: artems-hub # Your GCP Project ID
+  REGION: us-east1 # Your GCP Region
+  SERVICE_NAME: artems-hub # Your Cloud Run Service Name
+  REPO_NAME: artems-hub-repo # Your Artifact Registry Repo Name
+  IMAGE_TAG: ${{ github.sha }} # Use the commit SHA for a unique, traceable tag
+
+jobs:
+  deploy:
+    # Requires Linux runner for gcloud/Docker commands
+    runs-on: ubuntu-latest
+
+    # Permission settings required for Workload Identity Federation (OIDC)
+    permissions:
+      contents: "read"
+      id-token: "write" # This is crucial for generating the OIDC token
+
+    steps:
+      - name: --- Start Deployment for ${{ github.sha }} ---
+        run: echo "--- Starting deployment for commit ${{ github.sha }} ---"
+
+      # 1. Checkout Code
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Authenticate using Workload Identity Federation (WIF)
+      - name: 2. Google Auth (Keyless WIF)
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          # Your Service Account Email
+          service_account: "github-deployer@artems-hub.iam.gserviceaccount.com"
+          # Your WIF Provider Path (Restricts access to this repo only)
+          workload_identity_provider: "projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+
+      # 3. Set up gcloud CLI
+      - name: 3. Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      # 4. Configure Docker for Artifact Registry
+      - name: 4. Configure Docker & Authenticate Registry
+        run: |
+          echo "4. Configuring Docker to push to Artifact Registry in ${{ env.REGION }}..."
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      # 5. Build and Push Docker Image
+      - name: 5. Build and Push Docker Image
+        run: |
+          IMAGE_URI="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }}"
+          echo "5. Building and pushing Docker image with tag: ${{ env.IMAGE_TAG }}"
+          # CRITICAL: Build for linux/amd64 architecture for Cloud Run compatibility
+          docker build --platform=linux/amd64 -t $IMAGE_URI .
+          docker push $IMAGE_URI
+
+      # 6. Deploy to Cloud Run
+      - name: 6. Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }}
+          # Cost Optimization Flags
+          flags: --max-instances=1 --min-instances=0 --cpu-throttling --memory=256Mi
+
+      # 7. Clean up old images (Optional, for cost control)
+      - name: 7. Clean up old Docker Images
+        if: always() # Run cleanup even if deployment fails
+        run: |
+          echo "7. Cleaning up old Docker images in Artifact Registry (keeping last 10 for safety)..."
+          gcloud artifacts docker images delete \
+            "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}" \
+            --keep-last=10 \
+            --delete-tags \
+            --quiet
+          echo "--- Deployment Complete ---"

@@ -1,0 +1,16 @@
+# Python
+*.pyc
+__pycache__/
+.ahubvenv/
+
+# MacOS files
+.DS_Store
+
+# Terraform
+infrastructure/.terraform/
+infrastructure/terraform.tfstate
+infrastructure/*.tfstate.backup
+
+
+# Environment
+.env
