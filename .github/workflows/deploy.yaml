@@ -40,8 +40,7 @@ jobs:
           service_account: "github-deployer@artems-hub.iam.gserviceaccount.com"
           # Canonical resource path
           workload_identity_provider: "projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
-          # FIX: Explicitly setting the audience with the numeric project ID is required for successful WIF token exchange.
-          audience: "https://iam.googleapis.com/projects/975132365149/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          audience: "https://iam.googleapis.com/projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
 
       # 3. Set up gcloud CLI
       - name: 3. Setup gcloud CLI
