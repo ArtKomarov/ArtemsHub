@@ -40,7 +40,7 @@ jobs:
           service_account: "github-deployer@artems-hub.iam.gserviceaccount.com"
           # Canonical resource path
           workload_identity_provider: "projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
-          audience: "https://iam.googleapis.com/projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          # audience: "https://iam.googleapis.com/projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
 
       # 3. Set up gcloud CLI
       - name: 3. Setup gcloud CLI
@@ -69,16 +69,16 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }}
           # Cost Optimization Flags
-          flags: --max-instances=1 --min-instances=0 --cpu-throttling --memory=256Mi
+          # flags: --max-instances=1 --min-instances=0 --cpu-throttling --memory=256Mi
 
       # 7. Clean up old images (Optional, for cost control)
-      - name: 7. Clean up old Docker Images
-        if: always() # Run cleanup even if deployment fails
-        run: |
-          echo "7. Cleaning up old Docker images in Artifact Registry (keeping last 10 for safety)..."
-          gcloud artifacts docker images delete \
-            "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}" \
-            --keep-last=10 \
-            --delete-tags \
-            --quiet
-          echo "--- Deployment Complete ---"
+      # - name: 7. Clean up old Docker Images
+      #   if: always() # Run cleanup even if deployment fails
+      #   run: |
+      #     echo "7. Cleaning up old Docker images in Artifact Registry (keeping last 10 for safety)..."
+      #     gcloud artifacts docker images delete \
+      #       "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}" \
+      #       --keep-last=10 \
+      #       --delete-tags \
+      #       --quiet
+      #     echo "--- Deployment Complete ---"
