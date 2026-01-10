@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Typewriter Effect
     const typewriterElement = document.getElementById('typewriter-text');
-    const professions = ["ML Engineer", "AI Enthusiast", "Optimal Solution Enjoyer"];
+    const professions = ["Software Engineer", "ML Engineer", "Optimal Solution Enjoyer"];
     let professionIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
