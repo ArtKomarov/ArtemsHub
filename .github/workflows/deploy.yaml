@@ -70,15 +70,3 @@ jobs:
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }}
           # Cost Optimization Flags (already in terraform configuration)
           # flags: --max-instances=1 --min-instances=0 --cpu-throttling --memory=256Mi
-
-      # 7. Clean up old images
-      - name: 7. Clean up old Docker Images
-        if: always() # Run cleanup even if deployment fails
-        run: |
-          echo "7. Cleaning up old Docker images in Artifact Registry (keeping last 10 for safety)..."
-          gcloud artifacts docker images delete \
-            "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}" \
-            --keep-last=10 \
-            --delete-tags \
-            --quiet
-          echo "--- Deployment Complete ---"
