@@ -80,6 +80,14 @@ resource "google_artifact_registry_repository" "repo" {
       keep_count = 10
     }
   }
+  # Try to delete everything (the shield stops it from hitting the top 10)
+  cleanup_policies {
+    id     = "delete-old-versions"
+    action = "DELETE"
+    condition {
+      tag_state = "ANY"
+    }
+  }
 }
 
 # -----------------------------------------------------------------------------
@@ -112,11 +120,6 @@ resource "google_cloud_run_v2_service" "service" {
           cpu    = "1000m"
         }
       }
-      # You can define environment variables here if needed
-      # env {
-      #   name  = "PORT"
-      #   value = "8080"
-      # }
     }
   }
 
@@ -127,8 +130,10 @@ resource "google_cloud_run_v2_service" "service" {
   }
 
   lifecycle {
-    # Protect against accidental deletion of the service
     prevent_destroy = true
+    ignore_changes = [
+      template[0].containers[0].image,
+    ]
   }
 }
 

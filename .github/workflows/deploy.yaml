@@ -7,10 +7,10 @@ on:
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 env:
-  PROJECT_ID: artems-hub # Your GCP Project ID
-  REGION: us-east1 # Your GCP Region
-  SERVICE_NAME: artems-hub # Your Cloud Run Service Name
-  REPO_NAME: artems-hub-repo # Your Artifact Registry Repo Name
+  PROJECT_ID: artems-hub # GCP Project ID
+  REGION: us-east1 # GCP Region
+  SERVICE_NAME: artems-hub # Cloud Run Service Name
+  REPO_NAME: artems-hub-repo # Artifact Registry Repo Name
   IMAGE_TAG: ${{ github.sha }} # Use the commit SHA for a unique, traceable tag
 
 jobs:
@@ -39,8 +39,7 @@ jobs:
           project_id: "artems-hub"
           service_account: "github-deployer@artems-hub.iam.gserviceaccount.com"
           # Canonical resource path
-          workload_identity_provider: "projects/975132365149/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
-          # audience: "https://iam.googleapis.com/projects/artems-hub/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          workload_identity_provider: "projects/${{ env.PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
 
       # 3. Set up gcloud CLI
       - name: 3. Setup gcloud CLI
@@ -68,5 +67,4 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.REGION }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }}
-          # Cost Optimization Flags (already in terraform configuration)
-          # flags: --max-instances=1 --min-instances=0 --cpu-throttling --memory=256Mi
+          # Falgs are managed by terraform
