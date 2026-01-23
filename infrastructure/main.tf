@@ -47,12 +47,14 @@ provider "google" {
   region  = var.gcp_region
 }
 
+data "google_project" "project" {}
+
 # Enable the necessary APIs
 resource "google_project_service" "apis" {
   for_each = toset([
     "run.googleapis.com",
     "artifactregistry.googleapis.com",
-    "iamcredentials.googleapis.com", # Required for Workload Identity Federation (will be needed later)
+    "iamcredentials.googleapis.com", # Required for Workload Identity Federation
   ])
   project            = var.gcp_project_id
   service            = each.key
@@ -131,8 +133,14 @@ resource "google_cloud_run_v2_service" "service" {
 
   lifecycle {
     prevent_destroy = true
+    # We ignore changes to the image (managed by GitHub Actions) 
+    # and labels/annotations/client info (added by the deploy action metadata)
     ignore_changes = [
       template[0].containers[0].image,
+      template[0].labels,
+      template[0].annotations,
+      client,
+      client_version
     ]
   }
 }
@@ -203,7 +211,7 @@ resource "google_service_account_iam_member" "github_access" {
   service_account_id = google_service_account.github_sa.name
   role               = "roles/iam.workloadIdentityUser"
 
-  # CRITICAL: This condition only allows tokens coming from YOUR specific GitHub repository (ArtKomarov/ArtemsHub)
+  # This condition only allows tokens coming from the specific GitHub repository (ArtKomarov/ArtemsHub)
   member = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_org}/${var.github_repo}"
 }
 
@@ -233,5 +241,5 @@ output "gcp_service_account_email" {
 # Output the WIF Provider name needed for the GitHub Actions workflow file
 output "wif_provider_name" {
   description = "Workload Identity Provider Name for GitHub Actions"
-  value       = "projects/${var.gcp_project_id}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.github_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.github_provider.workload_identity_pool_provider_id}"
+  value       = "projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.github_pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.github_provider.workload_identity_pool_provider_id}"
 }
