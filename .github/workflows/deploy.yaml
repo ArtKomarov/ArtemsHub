@@ -39,7 +39,7 @@ jobs:
           project_id: "artems-hub"
           service_account: "github-deployer@artems-hub.iam.gserviceaccount.com"
           # Canonical resource path
-          workload_identity_provider: "projects/${{ env.PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          workload_identity_provider: "projects/975132365149/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
 
       # 3. Set up gcloud CLI
       - name: 3. Setup gcloud CLI
