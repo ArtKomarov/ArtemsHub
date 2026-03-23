@@ -78,8 +78,8 @@ resource "google_artifact_registry_repository" "repo" {
     id     = "free-tier-limit-count"
     action = "KEEP"
     most_recent_versions {
-      # Keep the 10 most recently created images globally (regardless of age)
-      keep_count = 10
+      # Keep the 6 most recently created images globally (regardless of age)
+      keep_count = 6
     }
   }
   # Try to delete everything (the shield stops it from hitting the top 10)
